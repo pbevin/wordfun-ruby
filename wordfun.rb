@@ -16,6 +16,10 @@ class Wordfun < Sinatra::Base
     cmd('fw', params[:q])
   end
 
+  get '/words/cr' do
+    cmd('fw -c', params[:q])
+  end
+
   private
 
   def cmd(name, query)
@@ -72,6 +76,13 @@ __END__
       %input{type: "Submit", value: "Find Word/Phrase"}
 
     %hr
+    %h2 Solve a cryptogram
+    %p Enter a word from a cryptogram, e.g., <code>opgxcxbgxs</code> to see words that match it.
+    %form#crform
+      %input#cr{type: "text", name: "cr", autocorrect: "off", autocapitalize: "off"}
+      %input{type: "Submit", value: "Cryptogram"}
+
+    %hr
     %address
       <a href="http://www.petebevin.com/">Pete Bevin</a>, <a href="mailto:pete@petebevin.com">pete@petebevin.com</a>.
 
@@ -97,5 +108,6 @@ __END__
       };
       $('#anform').submit(handler('an'));
       $('#fwform').submit(handler('fw'));
+      $('#crform').submit(handler('cr'));
       $('#an').focus();
     });
