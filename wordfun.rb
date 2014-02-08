@@ -23,7 +23,6 @@ class Wordfun < Sinatra::Base
   private
 
   def cmd(name, query)
-    p [name, query]
     `#{name} #{query}`.force_encoding("WINDOWS-1252").encode("UTF-8")
   end
 end
