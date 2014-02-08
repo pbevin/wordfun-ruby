@@ -61,7 +61,7 @@ __END__
     %h2 Find an Anagram
     %p Type in a word or series of words here to get valid words and phrases from the dictionary.
     %form#anform
-      %input#an{type: "text", name: "an", autocorrect: "off", autocapitalize: "off"}
+      %input#an{type: "text", name: "an", autocorrect: "off", autocapitalize: "off", tabindex: 1}
       %input{type: "Submit", value: "Anagram"}
 
     %hr
@@ -71,14 +71,14 @@ __END__
       to get matching words and phrases from the dictionary.  Don't type spaces between words.
       You can match word boundaries with forward slashes, like this: <code>h.r./...l../e.g</code>
     %form#fwform
-      %input#fw{type: "text", name: "fw", autocorrect: "off", autocapitalize: "off"}
+      %input#fw{type: "text", name: "fw", autocorrect: "off", autocapitalize: "off", tabindex: 2}
       %input{type: "Submit", value: "Find Word/Phrase"}
 
     %hr
     %h2 Solve a cryptogram
     %p Enter a word from a cryptogram, e.g., <code>opgxcxbgxs</code> to see words that match it.
     %form#crform
-      %input#cr{type: "text", name: "cr", autocorrect: "off", autocapitalize: "off"}
+      %input#cr{type: "text", name: "cr", autocorrect: "off", autocapitalize: "off", tabindex: 3}
       %input{type: "Submit", value: "Cryptogram"}
 
     %hr
