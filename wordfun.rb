@@ -58,7 +58,7 @@ __END__
     %h2 Find an Anagram
     %p Type in a word or series of words here to get valid words and phrases from the dictionary.
     %form#anform
-      %input#an{type: "text", name: "an"}
+      %input#an{type: "text", name: "an", autocorrect: "off", autocapitalize: "off"}
       %input{type: "Submit", value: "Anagram"}
 
     %hr
@@ -68,7 +68,7 @@ __END__
       to get matching words and phrases from the dictionary.  Don't type spaces between words.
       You can match word boundaries with forward slashes, like this: <code>h.r./...l../e.g</code>
     %form#fwform
-      %input#fw{type: "text", name: "fw"}
+      %input#fw{type: "text", name: "fw", autocorrect: "off", autocapitalize: "off"}
       %input{type: "Submit", value: "Find Word/Phrase"}
 
     %hr
