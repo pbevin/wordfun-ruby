@@ -1,5 +1,6 @@
 require 'sinatra/base'
 require 'haml'
+require 'shellwords'
 
 class Wordfun < Sinatra::Base
   enable :inline_templates
@@ -23,7 +24,10 @@ class Wordfun < Sinatra::Base
   private
 
   def cmd(name, query)
-    `#{name} #{query}`.force_encoding("WINDOWS-1252").encode("UTF-8")
+    query = query.downcase.gsub(" ", "/")
+    cmd = "#{name} #{Shellwords.escape(query)}"
+
+    `#{cmd}`.force_encoding("WINDOWS-1252").encode("UTF-8")
   end
 end
 
