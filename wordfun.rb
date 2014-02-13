@@ -24,7 +24,7 @@ class Wordfun < Sinatra::Base
   private
 
   def cmd(name, query)
-    query = query.downcase.gsub(" ", "/")
+    query = query.downcase.gsub(" ", "").gsub("…", "...")
     cmd = "#{name} #{Shellwords.escape(query)}"
 
     `#{cmd}`.force_encoding("WINDOWS-1252").encode("UTF-8")
