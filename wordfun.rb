@@ -45,7 +45,7 @@ class Wordfun < Sinatra::Base
   def preview(name, query)
     words = cmd(name, query).lines
     wc = words.count
-    if wc > 10
+    if wc > 25
       words = words.take(10) + ["..."]
     end
     words.map!(&:strip)
