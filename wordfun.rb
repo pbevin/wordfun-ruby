@@ -145,14 +145,21 @@ __END__
       }
 
       function preview(type) {
+        var currentlyShowing;
         var text_input = $('#' + type);
         var preview = $('#' + type + "_preview");
         var path = '/preview/' + type;
         return function() {
           var term = text_input.val();
           if (term !== '') {
-            $.get(path, { q: term }, function(text) {
-              preview.text(text).show();
+            delay(function() {
+              if (term === currentlyShowing || text_input.val() !== term) return;
+              $.get(path, { q: term }, function(text) {
+                if (text_input.val() === term) {
+                  preview.text(text).show();
+                  currentlyShowing = term;
+                }
+              });
             });
           } else {
             preview.hide();
@@ -160,6 +167,8 @@ __END__
           return false;
         };
       }
+
+      function delay(f) { setTimeout(f, 100); }
 
       $('#anform').submit(handler('an')).keyup(preview('an'));
       $('#fwform').submit(handler('fw')).keyup(preview('fw'));
