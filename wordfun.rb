@@ -3,6 +3,8 @@ require 'haml'
 require 'shellwords'
 
 class Wordfun < Sinatra::Base
+  MAX_PREVIEW = 25
+
   enable :inline_templates
 
   get '/' do
@@ -45,8 +47,8 @@ class Wordfun < Sinatra::Base
   def preview(name, query)
     words = cmd(name, query).lines
     wc = words.count
-    if wc > 25
-      words = words.take(10) + ["..."]
+    if wc > MAX_PREVIEW
+      words = words.take(MAX_PREVIEW) + ["..."]
     end
     words.map!(&:strip)
     pluralize(wc, "word") + " (#{words.join(", ")})"
