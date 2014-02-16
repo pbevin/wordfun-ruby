@@ -74,7 +74,7 @@ __END__
       h1 { font: 24pt sans-serif }
       h2 { font: 16pt sans-serif; font-weight: bold; color: red }
       #result_text {  font-family: "Courier New", Courier, mono}
-      .preview { color: #f00; font-size: 12px; font-weight: bold; }
+      .preview { color: #f00; font-size: 12px; font-weight: bold; display: none; }
       .hidden { display: none; }
 
   %body
@@ -152,8 +152,10 @@ __END__
           var term = text_input.val();
           if (term !== '') {
             $.get(path, { q: term }, function(text) {
-              preview.text(text);
+              preview.text(text).show();
             });
+          } else {
+            preview.hide();
           }
           return false;
         };
