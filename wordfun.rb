@@ -21,6 +21,18 @@ class Wordfun < Sinatra::Base
     cmd('fw -c', params[:q])
   end
 
+  get '/preview/an' do
+    preview('an', params[:q])
+  end
+
+  get '/preview/fw' do
+    preview('fw', params[:q])
+  end
+
+  get '/preview/cr' do
+    preview('fw -c', params[:q])
+  end
+
   private
 
   def cmd(name, query)
@@ -28,6 +40,24 @@ class Wordfun < Sinatra::Base
     cmd = "#{name} #{Shellwords.escape(query)}"
 
     `#{cmd}`.force_encoding("WINDOWS-1252").encode("UTF-8")
+  end
+
+  def preview(name, query)
+    words = cmd(name, query).lines
+    wc = words.count
+    if wc > 10
+      words = words.take(10) + ["..."]
+    end
+    words.map!(&:strip)
+    pluralize(wc, "word") + " (#{words.join(", ")})"
+  end
+
+  def pluralize(n, noun)
+    if n.to_i == 1
+      "1 #{noun}"
+    else
+      "#{n} #{noun}s"
+    end
   end
 end
 
@@ -44,6 +74,7 @@ __END__
       h1 { font: 24pt sans-serif }
       h2 { font: 16pt sans-serif; font-weight: bold; color: red }
       #result_text {  font-family: "Courier New", Courier, mono}
+      .preview { color: #f00; font-size: 12px; font-weight: bold; }
       .hidden { display: none; }
 
   %body
@@ -67,6 +98,7 @@ __END__
     %form#anform
       %input#an{type: "text", name: "an", autocorrect: "off", autocapitalize: "off", tabindex: 1}
       %input{type: "Submit", value: "Anagram"}
+      #an_preview.preview
 
     %hr
     %h2 Complete a Word or Phrase
@@ -77,6 +109,7 @@ __END__
     %form#fwform
       %input#fw{type: "text", name: "fw", autocorrect: "off", autocapitalize: "off", tabindex: 2}
       %input{type: "Submit", value: "Find Word/Phrase"}
+      #fw_preview.preview
 
     %hr
     %h2 Solve a cryptogram
@@ -84,6 +117,7 @@ __END__
     %form#crform
       %input#cr{type: "text", name: "cr", autocorrect: "off", autocapitalize: "off", tabindex: 3}
       %input{type: "Submit", value: "Cryptogram"}
+      #cr_preview.preview
 
     %hr
     %address
@@ -93,7 +127,7 @@ __END__
 
   :javascript
     $(function() {
-      var handler = function(type) {
+      function handler(type) {
         var text_input = $('#' + type);
         var path = '/words/' + type;
         return function() {
@@ -108,9 +142,25 @@ __END__
           }
           return false;
         };
-      };
-      $('#anform').submit(handler('an'));
-      $('#fwform').submit(handler('fw'));
-      $('#crform').submit(handler('cr'));
+      }
+
+      function preview(type) {
+        var text_input = $('#' + type);
+        var preview = $('#' + type + "_preview");
+        var path = '/preview/' + type;
+        return function() {
+          var term = text_input.val();
+          if (term !== '') {
+            $.get(path, { q: term }, function(text) {
+              preview.text(text);
+            });
+          }
+          return false;
+        };
+      }
+
+      $('#anform').submit(handler('an')).keyup(preview('an'));
+      $('#fwform').submit(handler('fw')).keyup(preview('fw'));
+      $('#crform').submit(handler('cr')).keyup(preview('cr'));
       $('#an').focus();
     });
