@@ -1,7 +1,7 @@
 %html
   %head
     %title Crossword Solver
-    %link{rel: "stylesheet", type: "text/css", media: "all", href: "stylesheets/app.css"}
+    %link{rel: "stylesheet", type: "text/css", media: "all", href: stylesheet_path("app") }
 
   %body
     #results.hidden
@@ -50,4 +50,4 @@
       <a href="http://www.petebevin.com/">Pete Bevin</a>, <a href="mailto:pete@petebevin.com">pete@petebevin.com</a>.
 
     %script{src: "http://code.jquery.com/jquery-1.10.1.min.js", type: "text/javascript"}
-    %script{src: "javascripts/app.js", type: "text/javascript"}
+    %script{src: javascript_path("app.js"), type: "text/javascript"}

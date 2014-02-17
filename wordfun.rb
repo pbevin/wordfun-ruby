@@ -1,11 +1,13 @@
 require 'sinatra/base'
+require 'sinatra/asset_pipeline'
 require 'haml'
 require 'shellwords'
 
 class Wordfun < Sinatra::Base
   MAX_PREVIEW = 25
 
-  set :public_folder, File.dirname(__FILE__) + '/assets'
+  set :assets_js_compressor, :uglifier
+  register Sinatra::AssetPipeline
 
   get '/' do
     haml :index
