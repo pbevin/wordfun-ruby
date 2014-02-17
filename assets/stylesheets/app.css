@@ -1,0 +1,7 @@
+body { background: #ffffff; font-family: Arial, Helvetica, sans-serif}
+P.warning { font: italic small Verdana, Arial, Helvetica, sans-serif; color: #3366FF}
+h1 { font: 24pt sans-serif }
+h2 { font: 16pt sans-serif; font-weight: bold; color: red }
+#result_text {  font-family: "Courier New", Courier, mono}
+.preview { color: #f00; font-size: 12px; font-weight: bold; display: none; }
+.hidden { display: none; }
