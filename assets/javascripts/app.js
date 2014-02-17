@@ -34,6 +34,7 @@ $(function() {
           });
         });
       } else {
+        currentlyShowing = "";
         preview.hide();
       }
       return false;
