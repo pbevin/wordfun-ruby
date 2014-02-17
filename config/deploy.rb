@@ -9,6 +9,7 @@ namespace :deploy do
 
   desc 'Restart application'
   task :restart do
+    invoke "deploy:assets:precompile"
     on roles(:app), in: :sequence, wait: 5 do
       execute :mkdir, release_path.join('tmp')
       execute :touch, release_path.join('tmp/restart.txt')
@@ -23,6 +24,18 @@ namespace :deploy do
       # within release_path do
       #   execute :rake, 'cache:clear'
       # end
+    end
+  end
+
+  namespace :assets do
+    task :precompile do
+      on roles(:app) do
+        within release_path do
+          with rack_env: (fetch("stage") || "production") do
+            execute :rake, "assets:precompile"
+          end
+        end
+      end
     end
   end
 
