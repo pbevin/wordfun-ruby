@@ -53,7 +53,7 @@ class Wordfun < Sinatra::Base
       words = words.take(MAX_PREVIEW) + ["..."]
     end
     words.map!(&:strip)
-    pluralize(wc, "word") + " (#{words.join(", ")})"
+    "#{query} (#{query.length}): #{pluralize(wc, "word")} (#{words.join(", ")})"
   end
 
   def pluralize(n, noun)
