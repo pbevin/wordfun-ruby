@@ -54,14 +54,14 @@ class Wordfun < Sinatra::Base
     end
     words.map!(&:strip)
     lengths = query.split("/").map(&:length).join(",")
-    "#{query} (#{lengths}): #{pluralize(wc, "word")} (#{words.join(", ")})"
+    "#{query} (#{lengths}): #{pluralize(wc, "match", "matches")} (#{words.join(", ")})"
   end
 
-  def pluralize(n, noun)
+  def pluralize(n, noun, plural)
     if n.to_i == 1
       "1 #{noun}"
     else
-      "#{n} #{noun}s"
+      "#{n} #{plural}"
     end
   end
 end
