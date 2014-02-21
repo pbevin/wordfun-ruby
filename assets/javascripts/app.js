@@ -57,11 +57,13 @@ $(function() {
 
   $(document).on("click", ".def", function() {
     var word = $(this).text();
-    var url = "http://en.wiktionary.org/wiki/" + encodeURIComponent(word) + "?printable=yes#English";
+    //var url = "http://en.wiktionary.org/wiki/" + encodeURIComponent(word) + "?printable=yes#English";
+    var url = "http://en.wiktionary.org/wiki/" + encodeURIComponent(word) + "#English";
 
-    $("#defn .title").text(word);
-    $("#defn iframe").attr("src", url)
-    $("#defn").show();
+    document.location = url;
+    // $("#defn .title").text(word);
+    // $("#defn iframe").attr("src", url)
+    // $("#defn").show();
   });
 
   $('#anform').submit(showResults('an')).keyup(preview('an'));
