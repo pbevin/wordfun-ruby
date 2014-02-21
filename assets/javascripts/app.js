@@ -1,5 +1,5 @@
 $(function() {
-  function handler(type) {
+  function showResults(type) {
     var text_input = $('#' + type);
     var path = '/words/' + type;
     return function() {
@@ -9,7 +9,19 @@ $(function() {
           $('#intro').hide();
           $('#results').show();
           $('#search_term').html("`" + term + "'");
-          $('#result_text').html(data.replace(/\n/g, "<br>\n"));
+
+          var words = data.split("\n");
+          var i, text;
+
+          if (words.length > 1000) {
+            text = data.replace(/\n/g, "<br>\n");
+          } else {
+            text = "";
+            for (i = 0; i < words.length; i++) {
+              text += '<a class="def" href="javascript:void(0);">' + words[i] + "</a><br>\n";
+            }
+          }
+          $('#result_text').html(text);
         });
       }
       return false;
@@ -43,8 +55,17 @@ $(function() {
 
   function delay(f) { setTimeout(f, 100); }
 
-  $('#anform').submit(handler('an')).keyup(preview('an'));
-  $('#fwform').submit(handler('fw')).keyup(preview('fw'));
-  $('#crform').submit(handler('cr')).keyup(preview('cr'));
+  $(document).on("click", ".def", function() {
+    var word = $(this).text();
+    var url = "http://en.wiktionary.org/wiki/" + encodeURIComponent(word) + "?printable=yes#English";
+
+    $("#defn .title").text(word);
+    $("#defn iframe").attr("src", url)
+    $("#defn").show();
+  });
+
+  $('#anform').submit(showResults('an')).keyup(preview('an'));
+  $('#fwform').submit(showResults('fw')).keyup(preview('fw'));
+  $('#crform').submit(showResults('cr')).keyup(preview('cr'));
   $('#an').focus();
 });

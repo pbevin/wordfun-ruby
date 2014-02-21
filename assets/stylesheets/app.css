@@ -5,3 +5,35 @@ h2 { font: 16pt sans-serif; font-weight: bold; color: red }
 #result_text {  font-family: "Courier New", Courier, mono}
 .preview { color: #f00; font-size: 12px; font-weight: bold; display: none; }
 .hidden { display: none; }
+#result_text a {
+  text-decoration: none;
+}
+#defn {
+  display: none;
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 400px;
+  height: 500px;
+  border: 2px solid #aaa;
+  background: #fff;
+}
+#defn .title {
+  margin-top: 0;
+  position: absolute;
+  top: 0;
+}
+#defn iframe {
+  position: absolute;
+  top: 30px;
+  width: 100%;
+  height: 470px;
+  border: none;
+  background: #fff;
+}
+
+@media screen and (max-width: 640px) {
+  #defn {
+    width: 300px;
+  }
+}

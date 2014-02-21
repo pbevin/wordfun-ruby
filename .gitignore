@@ -1,5 +1,6 @@
 *.o
 *~
+*.swp
 src/an
 src/fw
 src/test_accent
