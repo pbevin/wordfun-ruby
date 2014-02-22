@@ -2,9 +2,13 @@ require 'sinatra/base'
 require 'sinatra/asset_pipeline'
 require 'haml'
 require 'shellwords'
+require 'lingua/stemmer'
+require 'wordnet'
+require 'json'
 
 class Wordfun < Sinatra::Base
   MAX_PREVIEW = 25
+  MAX_DEFINE = 100
 
   set :assets_js_compressor, :uglifier
   register Sinatra::AssetPipeline
@@ -14,15 +18,15 @@ class Wordfun < Sinatra::Base
   end
 
   get '/words/an' do
-    cmd('an', params[:q])
+    full_list('an', params[:q])
   end
 
   get '/words/fw' do
-    cmd('fw', params[:q])
+    full_list('fw', params[:q])
   end
 
   get '/words/cr' do
-    cmd('fw -c', params[:q])
+    full_list('fw -c', params[:q])
   end
 
   get '/preview/an' do
@@ -44,6 +48,29 @@ class Wordfun < Sinatra::Base
     cmd = "#{name} #{Shellwords.escape(query)}"
 
     `#{cmd}`.force_encoding("WINDOWS-1252").encode("UTF-8")
+  end
+
+  def full_list(name, query)
+    words = cmd(name, query).lines
+    results = []
+
+    lex = WordNet::Lexicon.new
+    stemmer = Lingua::Stemmer.new(lang: "en")
+
+    words.each_with_index do |word, count|
+      word.strip!
+      result = { word: word }
+      if count < MAX_DEFINE
+        entry = lex[word.downcase] || lex[stemmer.stem(word.downcase)]
+        if entry
+          result[:defn] = entry.definition
+        end
+      end
+      results << result
+    end
+
+    content_type :json
+    { words: results }.to_json
   end
 
   def preview(name, query)

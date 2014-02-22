@@ -1,27 +1,37 @@
 $(function() {
+
   function showResults(type) {
     var text_input = $('#' + type);
     var path = '/words/' + type;
     return function() {
       var term = text_input.val();
       if (term !== '') {
-        $.get(path, { q: term }, function(data) {
+        $.get(path, { q: term }, function(result) {
+          var words = result.words;
+          var text = $("#result_text");
+          var i;
+          var word, entry;
+
+          text.empty();
+          for (i = 0; i < words.length; i++) {
+            word = words[i];
+
+            entry = $('<div class="entry">');
+            entry.append($('<code>').text(word.word));
+            entry.append($('<a>').
+              attr("href", "http://www.thefreedictionary.com/" + encodeURIComponent(word.word)).
+              attr("target", "wf_lookup").
+              text("lookup"));
+            if (word.defn) {
+              entry.append($("<dfn>").text(word.defn));
+              entry.append($("<div class=\"fade\">"));
+            }
+            text.append(entry);
+          }
+
           $('#intro').hide();
           $('#results').show();
           $('#search_term').html("`" + term + "'");
-
-          var words = data.split("\n");
-          var i, text;
-
-          if (words.length > 1000) {
-            text = data.replace(/\n/g, "<br>\n");
-          } else {
-            text = "";
-            for (i = 0; i < words.length; i++) {
-              text += '<a class="def" href="javascript:void(0);">' + words[i] + "</a><br>\n";
-            }
-          }
-          $('#result_text').html(text);
         });
       }
       return false;
