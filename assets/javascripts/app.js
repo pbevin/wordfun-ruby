@@ -1,3 +1,6 @@
+//= require jquery.lightbox_me
+//= require_self
+
 $(function() {
 
   function showResults(type) {
@@ -64,15 +67,13 @@ $(function() {
 
   function delay(f) { setTimeout(f, 100); }
 
-  $(document).on("click", ".def", function() {
-    var word = $(this).text();
-    //var url = "http://en.wiktionary.org/wiki/" + encodeURIComponent(word) + "?printable=yes#English";
-    var url = "http://en.wiktionary.org/wiki/" + encodeURIComponent(word) + "#English";
-
-    document.location = url;
-    // $("#defn .title").text(word);
-    // $("#defn iframe").attr("src", url)
-    // $("#defn").show();
+  $(document).on("click", "#result_text a", function(e) {
+    var url = $(this).attr("href");
+    e.preventDefault();
+    $('#def').find("iframe").attr("src", url);
+    $('#def').lightbox_me({
+      centered: true
+    });
   });
 
   $('#anform').submit(showResults('an')).keyup(preview('an'));

@@ -9,6 +9,17 @@ h2 { font: 18px Arial, Helvetica, sans-serif; font-weight: bold; color: red }
 .hidden { display: none; }
 #result_text a { text-decoration: none; }
 
+#def {
+  width: 90%;
+  height: 90%;
+}
+
+#def iframe {
+  height: 100%;
+  width: 100%;
+  background: white;
+}
+
 #result_text .entry { position: relative }
 #result_text .entry .fade {
   position:absolute;
