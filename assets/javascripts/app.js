@@ -17,11 +17,10 @@ $(function() {
             word = words[i];
 
             entry = $('<div class="entry">');
-            entry.append($('<code>').text(word.word));
             entry.append($('<a>').
               attr("href", "http://www.thefreedictionary.com/" + encodeURIComponent(word.word)).
               attr("target", "wf_lookup").
-              text("lookup"));
+              text(word.word));
             if (word.defn) {
               entry.append($("<dfn>").text(word.defn));
               entry.append($("<div class=\"fade\">"));

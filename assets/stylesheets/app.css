@@ -1,21 +1,15 @@
 body { background: #ffffff; font-family: Optima,Segoe,"Segoe UI",Candara,Calibri,Arial,sans-serif; }
 P.warning { font: italic small Verdana, Arial, Helvetica, sans-serif; color: #3366FF}
-h1 { font: 24pt Arial, Helvetica, sans-serif }
-h2 { font: 16pt Arial, Helvetica, sans-serif; font-weight: bold; color: red }
+h1 { font: 30px Arial, Helvetica, sans-serif }
+h2 { font: 18px Arial, Helvetica, sans-serif; font-weight: bold; color: red }
 #result_text .entry { overflow: hidden; white-space: nowrap; }
-#result_text .entry code { font-family: "Courier New", Courier, mono}
-#result_text .entry a { font: 10px Arial, Helvetica, sans-serif; margin-left: 6px; }
-#result_text .entry dfn { margin-left: 18px; font: 12px Arial, Helvetica, sans-serif;  }
+#result_text .entry a { font: 14px "Courier New", Courier, mono; }
+#result_text .entry dfn { margin-left: 12px; font: 12px Arial, Helvetica, sans-serif;  }
 .preview { color: #f00; font-size: 12px; font-weight: bold; display: none; }
 .hidden { display: none; }
-#result_text a {
-  text-decoration: none;
-}
+#result_text a { text-decoration: none; }
 
-#result_text .entry {
-  position: relative
-}
-
+#result_text .entry { position: relative }
 #result_text .entry .fade {
   position:absolute;
   top:0px;
