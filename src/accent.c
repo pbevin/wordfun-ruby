@@ -3,7 +3,6 @@
 
 static char accent_map[256];
 
-
 void
 strip_accents(char *str)
 {
@@ -28,7 +27,7 @@ canon(char *dst, char *str, int keep_spc)
     if (accent_map[ch]) {
       ch = accent_map[ch];
     }
-      
+
     if (isalpha(ch)) {
       *q++ = tolower(ch);
     }
@@ -49,6 +48,7 @@ add_accents(int unaccented, char *accented)
 
   for (p = (unsigned char *)accented; *p; p++) {
     accent_map[(int)*p] = unaccented;
+    accent_map[(int)*p - 0x20] = unaccented - 0x20;
   }
 }
 
@@ -58,9 +58,9 @@ void init_accent()
   char a[] = { 0xe0, 0xe1, 0xe2, 0xe3, 0xe4, 0xe5, 0 };
   char c[] = { 0xe7, 0 };
   char e[] = { 0xe8, 0xe9, 0xea, 0xeb, 0 };
-  char i[] = { 0xec, 0xee, 0xef, 0 };
+  char i[] = { 0xec, 0xed, 0xee, 0xef, 0 };
   char n[] = { 0xf1, 0 };
-  char o[] = { 0xf2, 0xf3, 0xf4, 0xf6, 0xf8, 0 };
+  char o[] = { 0xf2, 0xf3, 0xf4, 0xf5, 0xf6, 0xf7, 0xf8, 0 };
   char u[] = { 0xf9, 0xfa, 0xfb, 0xfc, 0 };
 
   add_accents('a', a);
