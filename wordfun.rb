@@ -1,7 +1,7 @@
 require 'sinatra/base'
 require 'sinatra/asset_pipeline'
 require 'haml'
-require 'shellwords'
+require 'wordsearch'
 require 'lingua/stemmer'
 require 'wordnet'
 require 'json'
@@ -45,20 +45,23 @@ class Wordfun < Sinatra::Base
 
   def cmd(name, query)
     query = query.downcase.gsub(" ", "").gsub("…", "...").gsub("?", ".")
-    cmd = "#{name} #{Shellwords.escape(query)}"
+    words = []
 
-    `#{cmd}`.force_encoding("WINDOWS-1252").encode("UTF-8")
+    Wordsearch.new("/usr/share/dict/anadict").public_send(name, query) do |word|
+      words << word
+    end
+
+    words
   end
 
   def full_list(name, query)
-    words = cmd(name, query).lines
+    words = cmd(name, query)
     results = []
 
     lex = WordNet::Lexicon.new
     stemmer = Lingua::Stemmer.new(lang: "en")
 
     words.each_with_index do |word, count|
-      word.strip!
       result = { word: word }
       if count < MAX_DEFINE
         entry = lex[word.downcase] || lex[stemmer.stem(word.downcase)]
@@ -74,12 +77,11 @@ class Wordfun < Sinatra::Base
   end
 
   def preview(name, query)
-    words = cmd(name, query).lines
+    words = cmd(name, query)
     wc = words.count
     if wc > MAX_PREVIEW
       words = words.take(MAX_PREVIEW) + ["..."]
     end
-    words.map!(&:strip)
     lengths = query.split("/").map(&:length).join(",")
     "#{query} (#{lengths}): #{pluralize(wc, "match", "matches")} (#{words.join(", ")})"
   end
