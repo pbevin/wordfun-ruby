@@ -48,7 +48,7 @@ class Wordfun < Sinatra::Base
     words = []
 
     Wordsearch.new("/usr/share/dict/anadict").public_send(name, query) do |word|
-      words << word
+      words << word.force_encoding("WINDOWS-1252").encode("UTF-8")
     end
 
     words
