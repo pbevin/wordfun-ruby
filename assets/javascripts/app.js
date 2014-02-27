@@ -2,14 +2,15 @@
 //= require_self
 
 $(function() {
-
   function showResults(type) {
     var text_input = $('#' + type);
     var path = '/words/' + type;
+
     return function() {
       var term = text_input.val();
+      var context = $('#' + type + 'c').val();
       if (term !== '') {
-        $.get(path, { q: term }, function(result) {
+        $.get(path, { q: term, c: context }, function(result) {
           var words = result.words;
           var text = $("#result_text");
           var i;
@@ -44,13 +45,14 @@ $(function() {
     var currentlyShowing;
     var text_input = $('#' + type);
     var preview = $('#' + type + "_preview");
+    var context = $('#' + type + 'c').val();
     var path = '/preview/' + type;
     return function() {
       var term = text_input.val();
       if (term !== '') {
         delay(function() {
           if (term === currentlyShowing || text_input.val() !== term) return;
-          $.get(path, { q: term }, function(text) {
+          $.get(path, { q: term, c: context }, function(text) {
             if (text_input.val() === term) {
               preview.text(text).show();
               currentlyShowing = term;
