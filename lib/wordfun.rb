@@ -39,19 +39,18 @@ class Wordfun
     stemmer = Lingua::Stemmer.new(lang: "en")
 
     words.each.with_index do |word, count|
-      result = { word: word }
       if count < MAX_DEFINE
         entry = lex[word.downcase] || lex[stemmer.stem(word.downcase)]
         if entry
-          result[:defn] = entry.definition
+          word = word.define(entry.definition)
         end
       end
-      results << result
+      results << word
     end
 
     results = disambiguate(results, query.context) if query.context?
 
-    results
+    results.map(&:to_api)
   end
 
   def preview(query)

@@ -25,8 +25,8 @@ $(function() {
               attr("href", "http://www.thefreedictionary.com/" + encodeURIComponent(word.word)).
               attr("target", "wf_lookup").
               text(word.word));
-            if (word.defn) {
-              entry.append($("<dfn>").text(word.defn));
+            if (word.definition) {
+              entry.append($("<dfn>").text(word.definition));
               entry.append($("<div class=\"fade\">"));
             }
             text.append(entry);

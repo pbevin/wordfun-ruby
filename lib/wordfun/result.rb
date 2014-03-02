@@ -1,3 +1,5 @@
+require 'wordfun/word'
+
 class Wordfun
   class Result
     attr_reader :count
@@ -18,8 +20,8 @@ class Wordfun
       self
     end
 
-    def each
-      @words.each
+    def each(&block)
+      @words.each(&block).map { |word| Wordfun::Word.new(word) }.to_enum
     end
   end
 end

@@ -15,7 +15,7 @@ describe Wordfun::Result do
       result.as_list.should == "arts, rats, star, tars, tsar"
     end
   end
-  
+
   describe '#truncate' do
     it "takes the first n results and adds a ..." do
       result.truncate(2).as_list.should == "arts, rats, ..."
@@ -29,6 +29,19 @@ describe Wordfun::Result do
       result.truncate(2).count.should == 5
     end
   end
-  
+
+  describe '#each' do
+    it "returns an enumerator if no block is given" do
+      result.each.should be_an_instance_of(Enumerator)
+    end
+
+    it "returns results as Wordfun::Word objects" do
+      ws = []
+      result.each.with_index { |w| ws << w }
+
+      ws.count.should == 5
+      ws[0].should be_an_instance_of(Wordfun::Word)
+    end
+  end
 end
 
