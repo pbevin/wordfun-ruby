@@ -1,4 +1,5 @@
 require 'wordfun/query'
+require 'wordfun/result'
 
 require 'haml'
 require 'wordsearch'
@@ -20,25 +21,24 @@ class Wordfun
     new.preview(query)
   end
 
-  def cmd(query)
-    word = query.word.downcase.gsub(" ", "").gsub("…", "...").gsub("?", ".")
-    words = []
-
-    Wordsearch.new("/usr/share/dict/anadict").public_send(query.command, word) do |word|
-      words << word.force_encoding("WINDOWS-1252").encode("UTF-8")
+  def cmd(query, wordsearch=nil)
+    wordsearch ||= Wordsearch.new("/usr/share/dict/anadict")
+    words = Enumerator.new(wordsearch, query.command, query.word).map do |word|
+      word.force_encoding("WINDOWS-1252").encode("UTF-8")
     end
 
-    words
+    Wordfun::Result.new(words.to_a)
   end
 
   def full_list(query)
     words = cmd(query)
+
     results = []
 
     lex = WordNet::Lexicon.new
     stemmer = Lingua::Stemmer.new(lang: "en")
 
-    words.each_with_index do |word, count|
+    words.each.with_index do |word, count|
       result = { word: word }
       if count < MAX_DEFINE
         entry = lex[word.downcase] || lex[stemmer.stem(word.downcase)]
@@ -55,12 +55,9 @@ class Wordfun
   end
 
   def preview(query)
-    words = cmd(query)
-    wc = words.count
-    if wc > MAX_PREVIEW
-      words = words.take(MAX_PREVIEW) + ["..."]
-    end
-    "#{query.word} (#{query.word_lengths}): #{pluralize(wc, "match", "matches")} (#{words.join(", ")})"
+    result = cmd(query).truncate(MAX_PREVIEW)
+    matches = pluralize(result.count, "match", "matches")
+    "#{query.word_with_lengths}: #{matches} (#{result.as_list})"
   end
 
   def disambiguate(results, context)

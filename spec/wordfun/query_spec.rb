@@ -12,6 +12,21 @@ describe Wordfun::Query do
     expect(q.context).to eq("platform")
   end
 
+  it "removes spaces from the word" do
+    q.word = "a b c"
+    q.word.should == "abc"
+  end
+
+  it "converts ? to . in the word" do
+    q.word = "a?b?"
+    q.word.should == "a.b."
+  end
+
+  it "converts Unicode ellipsis to ..." do
+    q.word = "…ly"
+    q.word.should == "...ly"
+  end
+
   it "can compute word lengths" do
     q.word = "....."
     expect(q.word_lengths).to eq("5")
@@ -22,12 +37,12 @@ describe Wordfun::Query do
 
   it "can tell if it has a context" do
     q.context = nil
-    expect(q.context?).to be_falsy
+    expect(q.context?).to be_false
 
     q.context = "platform"
-    expect(q.context?).to be_truthy
+    expect(q.context?).to be_true
 
     q.context = ""
-    expect(q.context?).to be_falsy
+    expect(q.context?).to be_false
   end
 end

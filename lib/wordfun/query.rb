@@ -8,12 +8,20 @@ class Wordfun
       @context = context
     end
 
+    def word=(word)
+      @word = word.downcase.gsub(" ", "").gsub("…", "...").gsub("?", ".")
+    end
+
     def word_lengths
       word.split("/").map(&:length).join(",")
     end
 
     def context?
       @context != nil && !@context.empty?
+    end
+
+    def word_with_lengths
+      "#{@word} (#{word_lengths})"
     end
   end
 end
