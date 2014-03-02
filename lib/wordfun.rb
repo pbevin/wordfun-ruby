@@ -1,62 +1,38 @@
-require 'sinatra/base'
-require 'sinatra/asset_pipeline'
+require 'wordfun/query'
+
 require 'haml'
 require 'wordsearch'
 require 'lingua/stemmer'
 require 'wordnet'
 require 'mysql2'
 require 'json'
+require 'wordfun'
 
-class Wordfun < Sinatra::Base
+class Wordfun
   MAX_PREVIEW = 25
   MAX_DEFINE = 100
 
-  set :assets_js_compressor, :uglifier
-  register Sinatra::AssetPipeline
-
-  get '/' do
-    haml :index
+  def self.full_list(query)
+    new.full_list(query)
   end
 
-  get '/words/an' do
-    full_list('an', params[:q], params[:c])
+  def self.preview(query)
+    new.preview(query)
   end
 
-  get '/words/fw' do
-    full_list('fw', params[:q], params[:c])
-  end
-
-  get '/words/cr' do
-    full_list('fw -c', params[:q], params[:c])
-  end
-
-  get '/preview/an' do
-    preview('an', params[:q], params[:c])
-  end
-
-  get '/preview/fw' do
-    preview('fw', params[:q], params[:c])
-  end
-
-  get '/preview/cr' do
-    preview('fw -c', params[:q], params[:c])
-  end
-
-  private
-
-  def cmd(name, query, context)
-    query = query.downcase.gsub(" ", "").gsub("…", "...").gsub("?", ".")
+  def cmd(query)
+    word = query.word.downcase.gsub(" ", "").gsub("…", "...").gsub("?", ".")
     words = []
 
-    Wordsearch.new("/usr/share/dict/anadict").public_send(name, query) do |word|
+    Wordsearch.new("/usr/share/dict/anadict").public_send(query.command, word) do |word|
       words << word.force_encoding("WINDOWS-1252").encode("UTF-8")
     end
 
     words
   end
 
-  def full_list(name, query, context)
-    words = cmd(name, query, context)
+  def full_list(query)
+    words = cmd(query)
     results = []
 
     lex = WordNet::Lexicon.new
@@ -73,21 +49,18 @@ class Wordfun < Sinatra::Base
       results << result
     end
 
-    p 1
-    results = disambiguate(results, context)
+    results = disambiguate(results, query.context) if query.context?
 
-    content_type :json
-    { words: results }.to_json
+    results
   end
 
-  def preview(name, query, context)
-    words = cmd(name, query, context)
+  def preview(query)
+    words = cmd(query)
     wc = words.count
     if wc > MAX_PREVIEW
       words = words.take(MAX_PREVIEW) + ["..."]
     end
-    lengths = query.split("/").map(&:length).join(",")
-    "#{query} (#{lengths}): #{pluralize(wc, "match", "matches")} (#{words.join(", ")})"
+    "#{query.word} (#{query.word_lengths}): #{pluralize(wc, "match", "matches")} (#{words.join(", ")})"
   end
 
   def disambiguate(results, context)
@@ -128,3 +101,4 @@ class Wordfun < Sinatra::Base
     client.close
   end
 end
+

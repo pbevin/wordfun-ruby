@@ -18,3 +18,7 @@ gem "mysql2", "~> 0.3.15"
 
 gem "capistrano", "~> 3.1.0"
 gem "capistrano-bundler", "~> 1.1.2"
+
+gem "rspec", "~> 3.0.0.beta2", group: "test"
+gem "guard", "~> 2.5.1", group: "development"
+gem "guard-rspec", "~> 4.2.7", group: "development"
