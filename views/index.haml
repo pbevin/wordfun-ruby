@@ -23,7 +23,9 @@
     %p Type in a word or series of words here to get valid words and phrases from the dictionary.
     %form#anform
       %input#an{type: "text", name: "an", autocorrect: "off", autocapitalize: "off", tabindex: 1}
+      %input#anc{type: "text", name: "fwc", autocorrect: "off", autocapitalize: "off", tabindex: 2, placeholder: "Context (optional)"}
       %input{type: "Submit", value: "Anagram"}
+      %span.explain Context is an optional word from the clue
       #an_preview.preview
 
     %hr
@@ -33,17 +35,20 @@
       to get matching words and phrases from the dictionary.  Don't type spaces between words.
       You can match word boundaries with forward slashes, like this: <code>h.r./...l../e.g</code>
     %form#fwform
-      %input#fw{type: "text", name: "fw", autocorrect: "off", autocapitalize: "off", tabindex: 2}
-      %input#fwc.hidden{type: "text", name: "fwc", autocorrect: "off", autocapitalize: "off", tabindex: 2, placeholder: "Context (optional)"}
+      %input#fw{type: "text", name: "fw", autocorrect: "off", autocapitalize: "off", tabindex: 3}
+      %input#fwc{type: "text", name: "fwc", autocorrect: "off", autocapitalize: "off", tabindex: 4, placeholder: "Context (optional)"}
       %input{type: "Submit", value: "Find Word/Phrase"}
+      %span.explain Context is an optional word from the clue
       #fw_preview.preview
 
     %hr
     %h2 Solve a cryptogram
     %p Enter a word from a cryptogram, e.g., <code>opgxcxbgxs</code> to see words that match it.
     %form#crform
-      %input#cr{type: "text", name: "cr", autocorrect: "off", autocapitalize: "off", tabindex: 3}
+      %input#cr{type: "text", name: "cr", autocorrect: "off", autocapitalize: "off", tabindex: 5}
+      %input#crc{type: "text", name: "fwc", autocorrect: "off", autocapitalize: "off", tabindex: 6, placeholder: "Context (optional)"}
       %input{type: "Submit", value: "Cryptogram"}
+      %span.explain Context is an optional word from the clue
       #cr_preview.preview
 
     %hr

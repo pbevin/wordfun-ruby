@@ -23,7 +23,7 @@ class Wordfun
 
   def cmd(query, wordsearch=nil)
     wordsearch ||= Wordsearch.new("/usr/share/dict/anadict")
-    words = Enumerator.new(wordsearch, query.command, query.word).map do |word|
+    words = wordsearch.to_enum(query.command, query.word).map do |word|
       word.force_encoding("WINDOWS-1252").encode("UTF-8")
     end
 
@@ -48,7 +48,7 @@ class Wordfun
       results << word
     end
 
-    results = disambiguate(results, query.context) if query.context?
+    results = disambiguate(results, query)
 
     results.map(&:to_api)
   end
@@ -59,23 +59,27 @@ class Wordfun
     "#{query.word_with_lengths}: #{matches} (#{result.as_list})"
   end
 
-  def disambiguate(results, context)
-    if context && !context.empty?
+  def disambiguate(results, query)
+    if query.context?
       with_db do |client|
-        words = results.map { |r| r[:word] }
-        quoted_words = words.map { |w| "'#{w.upcase.gsub(/[^A-Z]/, '')}'" }.join(",")
-        rows = client.query("select word, count(*) as N, clue from clues where match(clue) against ('#{client.escape(context)}') and clue not like '%\\_\\_\\_%' and clue not like '%--%' and word in (#{quoted_words}) group by word order by N desc", as: :hash).to_a
-        matching_words = []
+        canonical_words = results.inject({}) { |dict, word| dict[word.canonical] = word; dict }
+        quoted_words = canonical_words.keys.map { |w| "'#{w}'" }.join(",")
+        rows = client.query("select word, count(*) as score, clue from clues where match(clue) against ('#{client.escape(query.context)}') and clue not like '%\\_\\_\\_%' and clue not like '%--%' and word in (#{quoted_words}) group by word", as: :hash).to_a
         rows.each do |row|
-          word = row["word"]
-          matches, results = results.partition { |r| r[:word].upcase.gsub(/[^A-Z]/, '') == word }
-          matches.each { |r| r[:defn] = row["clue"] }
-          matching_words += matches
+          cword = row["word"]
+          canonical_words[cword] = canonical_words[cword].define(row["clue"])
+          canonical_words[cword].score = row["score"]
         end
-        results = matching_words + results
+        results = results.map { |word| canonical_words[word.canonical] || word }
+
+        results.each do |word|
+          if word.score == 0 && word.definition.include?(query.context)
+            word.score = 1
+          end
+        end
+        results = results.each.with_index.sort_by { |word, idx| [-word.score, idx] }.map(&:first)
       end
     end
-
     results
   end
 

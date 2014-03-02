@@ -9,11 +9,27 @@ class Wordfun
     end
 
     def to_api
-      { word: @word }
+      { word: @word, score: score }
     end
 
     def define(definition)
       WordWithDefinition.new(@word, definition)
+    end
+
+    def canonical
+      @word.upcase.gsub(/[^A-Z]/, '')
+    end
+
+    def score
+      @score || 0
+    end
+
+    def definition
+      ""
+    end
+
+    def score=(score)
+      @score = score
     end
   end
 

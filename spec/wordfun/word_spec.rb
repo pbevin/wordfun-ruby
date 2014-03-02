@@ -28,5 +28,22 @@ describe Wordfun::Word do
       }
     end
   end
-  
+
+  describe "#canonical" do
+    it "is the uppercase word without non-letters" do
+      coffee.canonical.should == "COFFEE"
+      Wordfun::Word.new("it's a wrap").canonical.should == "ITSAWRAP"
+    end
+  end
+
+  describe '#score' do
+    it "is 0 initially" do
+      coffee.score.should == 0
+    end
+
+    it "can be set" do
+      coffee.score = 2
+      coffee.score.should == 2
+    end
+  end
 end

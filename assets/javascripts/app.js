@@ -29,6 +29,9 @@ $(function() {
               entry.append($("<dfn>").text(word.definition));
               entry.append($("<div class=\"fade\">"));
             }
+            if (word.score) {
+              entry.addClass("good");
+            }
             text.append(entry);
           }
 
