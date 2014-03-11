@@ -26,7 +26,7 @@ class Wordfun < Sinatra::Base
   end
 
   get '/words/cr' do
-    full_list('fw -c', params[:q])
+    full_list('cr', params[:q])
   end
 
   get '/preview/an' do
@@ -38,7 +38,7 @@ class Wordfun < Sinatra::Base
   end
 
   get '/preview/cr' do
-    preview('fw -c', params[:q])
+    preview('cr', params[:q])
   end
 
   private
