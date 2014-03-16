@@ -1,4 +1,3 @@
-require 'sinatra/asset_pipeline/task.rb'
-require './wordfun'
+require './app'
 
-Sinatra::AssetPipeline::Task.define! Wordfun
+Sinatra::AssetPipeline::Task.define! App

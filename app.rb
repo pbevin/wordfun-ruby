@@ -1,3 +1,10 @@
+$: << File.join(File.dirname(__FILE__), "lib")
+
+require 'sinatra/asset_pipeline/task.rb'
+require 'sinatra/base'
+require 'sinatra/asset_pipeline'
+require 'wordfun'
+
 class App < Sinatra::Base
   set :assets_js_compressor, :uglifier
   register Sinatra::AssetPipeline
