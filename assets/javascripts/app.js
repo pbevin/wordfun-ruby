@@ -3,37 +3,58 @@
 
 $(function() {
 
+  function parseTerm(term, callback) {
+    var word, context, parts;
+    if (term.match(/::/)) {
+      parts = term.split('::');
+      word = $.trim(parts[0]);
+      context = $.trim(parts[1]);
+    } else {
+      word = term;
+      context = null;
+    }
+    callback(word, context);
+  }
+
   function showResults(type) {
     var text_input = $('#' + type);
     var path = '/words/' + type;
+
     return function() {
       var term = text_input.val();
+
       if (term !== '') {
-        $.get(path, { q: term }, function(result) {
-          var words = result.words;
-          var text = $("#result_text");
-          var i;
-          var word, entry;
+        parseTerm(term, function(word, context) {
 
-          text.empty();
-          for (i = 0; i < words.length; i++) {
-            word = words[i];
+          $.get(path, { q: word, c: context }, function(result) {
+            var words = result.words;
+            var text = $("#result_text");
+            var i;
+            var word, entry;
 
-            entry = $('<div class="entry">');
-            entry.append($('<a>').
-              attr("href", "http://www.thefreedictionary.com/" + encodeURIComponent(word.word)).
-              attr("target", "wf_lookup").
-              text(word.word));
-            if (word.defn) {
-              entry.append($("<dfn>").text(word.defn));
-              entry.append($("<div class=\"fade\">"));
+            text.empty();
+            for (i = 0; i < words.length; i++) {
+              word = words[i];
+
+              entry = $('<div class="entry">');
+              entry.append($('<a>').
+                attr("href", "http://www.thefreedictionary.com/" + encodeURIComponent(word.word)).
+                attr("target", "wf_lookup").
+                text(word.word));
+              if (word.definition) {
+                entry.append($("<dfn>").text(word.definition));
+                entry.append($("<div class=\"fade\">"));
+              }
+              if (word.score) {
+                entry.addClass("good");
+              }
+              text.append(entry);
             }
-            text.append(entry);
-          }
 
-          $('#intro').hide();
-          $('#results').show();
-          $('#search_term').html("`" + term + "'");
+            $('#intro').hide();
+            $('#results').show();
+            $('#search_term').html("`" + term + "'");
+          });
         });
       }
       return false;
@@ -48,13 +69,15 @@ $(function() {
     return function() {
       var term = text_input.val();
       if (term !== '') {
-        delay(function() {
-          if (term === currentlyShowing || text_input.val() !== term) return;
-          $.get(path, { q: term }, function(text) {
-            if (text_input.val() === term) {
-              preview.text(text).show();
-              currentlyShowing = term;
-            }
+        parseTerm(term, function(word, context) {
+          delay(function() {
+            if (term === currentlyShowing || text_input.val() !== term) return;
+            $.get(path, { q: word, c: context }, function(text) {
+              if (text_input.val() === term) {
+                preview.text(text).show();
+                currentlyShowing = term;
+              }
+            });
           });
         });
       } else {

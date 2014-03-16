@@ -3,11 +3,14 @@ P.warning { font: italic small Verdana, Arial, Helvetica, sans-serif; color: #33
 h1 { font: 30px Arial, Helvetica, sans-serif }
 h2 { font: 18px Arial, Helvetica, sans-serif; font-weight: bold; color: red }
 #result_text .entry { overflow: hidden; white-space: nowrap; }
+#result_text .entry.good { background: #ffc; }
 #result_text .entry a { font: 14px "Courier New", Courier, mono; }
 #result_text .entry dfn { margin-left: 12px; font: 12px Arial, Helvetica, sans-serif;  }
 .preview { color: #f00; font-size: 12px; font-weight: bold; display: none; }
 .hidden { display: none; }
 #result_text a { text-decoration: none; }
+
+.explain { font-size: 11px; margin-left: 12px; color: #999; }
 
 #def {
   width: 90%;
