@@ -77,6 +77,7 @@ class Wordfun
             word.score = 1
           end
         end
+        results.delete_if { |word| word.score == 0 }
         results = results.each.with_index.sort_by { |word, idx| [-word.score, idx] }.map(&:first)
       end
     end
