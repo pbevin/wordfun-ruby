@@ -16,6 +16,13 @@ namespace :deploy do
     end
   end
 
+  desc 'Fix up database.yml'
+  task :dbconfig do
+    on roles(:app) do
+      execute :cp, shared_path.join("database.yml"), release_path.join("config/database.yml")
+    end
+  end
+
   after :publishing, :restart
 
   after :restart, :clear_cache do

@@ -8,6 +8,7 @@ require 'wordnet'
 require 'mysql2'
 require 'json'
 require 'wordfun'
+require 'yaml'
 
 class Wordfun
   MAX_PREVIEW = 25
@@ -93,11 +94,8 @@ class Wordfun
   end
 
   def with_db
-    client = Mysql2::Client.new(
-      host: "localhost",
-      database: "wordfun",
-      username: "pete"
-    )
+    dbconfig = YAML.load_file("config/database.yml")
+    client = Mysql2::Client.new(dbconfig)
     yield client
     client.close
   end
