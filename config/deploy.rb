@@ -23,6 +23,7 @@ namespace :deploy do
     end
   end
 
+  after :publishing, :dbconfig
   after :publishing, :restart
 
   after :restart, :clear_cache do
