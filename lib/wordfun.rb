@@ -63,23 +63,10 @@ class Wordfun
   def disambiguate(results, query)
     if query.context?
       with_db do |client|
-        canonical_words = results.inject({}) { |dict, word| dict[word.canonical] = word; dict }
-        quoted_words = canonical_words.keys.map { |w| "'#{w}'" }.join(",")
-        rows = client.query("select word, count(*) as score, clue from clues where match(clue) against ('#{client.escape(query.context)}') and clue not like '%\\_\\_\\_%' and clue not like '%--%' and word in (#{quoted_words}) group by word", as: :hash).to_a
-        rows.each do |row|
-          cword = row["word"]
-          canonical_words[cword] = canonical_words[cword].define(row["clue"])
-          canonical_words[cword].score = row["score"]
-        end
-        results = results.map { |word| canonical_words[word.canonical] || word }
+        q = query.word.gsub(".", "_")
+        rows = client.query("select word, count(*) as score, definition from words, definitions where definitions.word_id = words.id and match(definition) against ('#{client.escape(query.context)}') and words.letters like '#{client.escape(q)}' and words.length = #{q.length} group by word", as: :hash).to_a
 
-        results.each do |word|
-          if word.score == 0 && word.definition.include?(query.context)
-            word.score = 1
-          end
-        end
-        results.delete_if { |word| word.score == 0 }
-        results = results.each.with_index.sort_by { |word, idx| [-word.score, idx] }.map(&:first)
+        results = rows.map { |row| w = Word.new(row["word"]).define(row["definition"]); w.score = row["score"]; w }.sort_by(&:score).reverse
       end
     end
     results
