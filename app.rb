@@ -16,7 +16,7 @@ class App < Sinatra::Base
   end
 
   get '/preview/thesaurus' do
-    query = params[:q]
+    query = (params[:q] || "").strip
     entries = Thesaurus.lookup(query)
     root_words = entries.map(&:root) - [query]
     if root_words.any?
