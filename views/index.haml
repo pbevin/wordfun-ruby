@@ -39,12 +39,12 @@
       #fw_preview.preview
 
     %hr
-    %h2 Solve a cryptogram
-    %p Enter a word from a cryptogram, e.g., <code>opgxcxbgxs</code> to see words that match it.
-    %form#crform
-      %input#cr{type: "text", name: "cr", autocorrect: "off", autocapitalize: "off", tabindex: 5}
-      %input{type: "Submit", value: "Cryptogram"}
-      #cr_preview.preview
+    %h2 Thesaurus
+    %p Enter a word to get synonyms.
+    %form#thesform
+      %input#thesaurus{type: "text", name: "thesaurus", autocapitalize: "off", tabindex: 5}
+      %button Search Thesaurus
+      #thesaurus_preview.preview
 
     %hr
     %address

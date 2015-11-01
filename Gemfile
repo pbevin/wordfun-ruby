@@ -3,6 +3,7 @@ ruby "2.1.5"
 source "https://rubygems.org"
 
 gem "wordsearch", "~> 1.0.0"
+gem 'thesaurus', '~> 0.1.0'
 
 gem "sinatra", "~> 1.4.4"
 gem "haml", "~> 4.0.5"

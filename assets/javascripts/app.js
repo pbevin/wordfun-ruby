@@ -2,6 +2,8 @@
 //= require_self
 
 $(function() {
+  var thesaurusPreview = $('#thesaurus_preview');
+  var thesaurusInput = $('#thesaurus');
 
   function parseTerm(term, callback) {
     var word, context, parts;
@@ -61,31 +63,82 @@ $(function() {
     };
   }
 
+  var currentlyShowing = {};
+  var currentlyRequesting = {};
+
   function preview(type) {
-    var currentlyShowing;
     var text_input = $('#' + type);
     var preview = $('#' + type + "_preview");
     var path = '/preview/' + type;
+
     return function() {
       var term = text_input.val();
       if (term !== '') {
         parseTerm(term, function(word, context) {
           delay(function() {
-            if (term === currentlyShowing || text_input.val() !== term) return;
+            if (term === currentlyRequesting[type] || term === currentlyShowing[type] || text_input.val() !== term) return;
+            currentlyRequesting[type] = term
             $.get(path, { q: word, c: context }, function(text) {
               if (text_input.val() === term) {
                 preview.text(text).show();
-                currentlyShowing = term;
+                currentlyShowing[type] = term;
+                currentlyRequesting[type] = null;
               }
             });
           });
         });
       } else {
-        currentlyShowing = "";
+        currentlyShowing[type] = "";
         preview.hide();
       }
       return false;
     };
+  }
+
+  function thesPreview() {
+    var word = thesaurusInput.val();
+
+    if (word === '') {
+      thesaurusPreview.hide();
+      currentlyShowing.thesaurus = "";
+    } else {
+      delay(function() {
+        if (word === currentlyRequesting.thesaurus || word === currentlyShowing.thesaurus || thesaurusInput.val() !== word) return;
+        currentlyRequesting.thesaurus = word;
+        $.getJSON("/preview/thesaurus", { q: word }, function(result) {
+          var matches;
+
+          var html = $('<span>').text(result.query + ": ");
+          if (result.words.length === 0) {
+            html = html.append("No matches.");
+          } else {
+            result.words.forEach(function(w, i) {
+              var link =
+                $('<a href="javascript:void(0)"></a>')
+                  .text(w)
+                  .on('click', function() { thesaurusSearch(w) });
+
+              if (i > 0) {
+                html.append(", ")
+              }
+              html.append(link);
+            });
+          }
+          thesaurusPreview.html(html).show();
+          currentlyShowing.thesaurus = word;
+          currentlyRequesting.thesaurus = null;
+        });
+      });
+    }
+  }
+
+  function thesaurusSearch(word) {
+    thesaurusInput.val(word);
+    thesPreview();
+  }
+
+  function thesResults(e) {
+    e.preventDefault();
   }
 
   function delay(f) { setTimeout(f, 100); }
@@ -101,6 +154,6 @@ $(function() {
 
   $('#anform').submit(showResults('an')).keyup(preview('an'));
   $('#fwform').submit(showResults('fw')).keyup(preview('fw'));
-  $('#crform').submit(showResults('cr')).keyup(preview('cr'));
+  $('#thesform').submit(thesResults).keyup(thesPreview);
   $('#an').focus();
 });
