@@ -23,7 +23,7 @@ class Wordfun
   end
 
   def cmd(query, wordsearch=nil)
-    wordsearch ||= Wordsearch.new("/usr/share/dict/anadict")
+    wordsearch ||= Wordsearch.new(ENV["DICT"] || "/usr/share/dict/anadict")
     words = wordsearch.to_enum(query.command, query.word).map do |word|
       word.force_encoding("WINDOWS-1252").encode("UTF-8")
     end
