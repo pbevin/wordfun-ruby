@@ -53,7 +53,7 @@ $(function() {
 
             $('#intro').hide();
             $('#results').show();
-            $('#search_term').html("`" + term + "'");
+            $('#search_term').html(term);
           });
         });
       }

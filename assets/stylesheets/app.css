@@ -51,7 +51,7 @@ table {
 
 body {
   background: #ffffff;
-  font-family: Optima,Segoe,"Segoe UI",Candara,Calibri,Arial,sans-serif;
+  font-family: Arial, Helvetica, sans-serif;
   margin: 8px;
 }
 p {
@@ -68,6 +68,9 @@ h1 {
   margin: 0 0 0.67em;
   font: 30px Arial, Helvetica, sans-serif
 }
+h1 em {
+  color: #00f;
+}
 h2 {
   margin: 0.83em 0;
   font: 18px Arial, Helvetica, sans-serif;
@@ -81,10 +84,15 @@ code {
   /* font-family: Monaco, "Lucida Console", monospace; */
   font-family: monospace;
 }
+#result_text {
+  font: normal 12px Arial, Helvetica, sans-serif;
+}
+#result_text .entry dfn {
+  margin-left: 12px;
+}
 #result_text .entry { overflow: hidden; white-space: nowrap; }
 #result_text .entry.good { background: #ffc; }
-#result_text .entry a { font: 14px "Courier New", Courier, mono; }
-#result_text .entry dfn { margin-left: 12px; font: 12px Arial, Helvetica, sans-serif;  }
+/* #result_text .entry a { font: 14px "Courier New", Courier, mono; } */
 .preview { color: #f00; font-size: 12px; font-weight: bold; display: none; }
 .hidden { display: none; }
 #result_text a { text-decoration: none; }
