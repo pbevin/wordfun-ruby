@@ -110,8 +110,9 @@ $(function() {
           var list$ = $('<ul>');
 
           if (result.words.length === 0) {
-            list$ = list$.append("<li>No matches.</li>");
+            list$ = list$.append("<li>" + result.query + ": No matches.</li>");
           } else {
+            list$ = list$.append("<li>" + result.query + ": " + result.count + "</li>");
             result.words.forEach(function(w) {
               var len = w[0];
               var words = w[1];

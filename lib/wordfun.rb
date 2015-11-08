@@ -74,7 +74,11 @@ class Wordfun
       words = entries.select { |entry| entry.root == word }.flat_map(&:words)
     end
 
-    group_by_length(words)
+    {
+      query: query.word,
+      count: pluralize(words.length, "match", "matches"),
+      words: group_by_length(words)
+    }
   end
 
   def disambiguate(results, query)

@@ -24,7 +24,7 @@ class App < Sinatra::Base
     results = Wordfun.thesaurus_preview(query)
 
     content_type :json
-    { query: query.word, words: results }.to_json
+    results.to_json
   end
 
   get '/preview/:cmd' do
