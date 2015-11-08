@@ -22,6 +22,10 @@ class Wordfun
     new.preview(query)
   end
 
+  def self.thesaurus_preview(query)
+    new.thesaurus_preview(query)
+  end
+
   def cmd(query, wordsearch=nil)
     wordsearch ||= Wordsearch.new(ENV["DICT"] || "/usr/share/dict/anadict")
     words = wordsearch.to_enum(query.command, query.word).map do |word|
@@ -60,6 +64,19 @@ class Wordfun
     "#{query.word_with_lengths}: #{matches} (#{result.as_list})"
   end
 
+  def thesaurus_preview(query)
+    word = query.word.to_s.strip.downcase
+    entries = Thesaurus.lookup(word)
+    root_words = entries.map(&:root) - [word]
+    if root_words.any?
+      words = root_words
+    else
+      words = entries.select { |entry| entry.root == word }.flat_map(&:words)
+    end
+
+    group_by_length(words)
+  end
+
   def disambiguate(results, query)
     if query.context?
       with_db do |client|
@@ -85,6 +102,13 @@ class Wordfun
     client = Mysql2::Client.new(dbconfig)
     yield client
     client.close
+  end
+
+  def group_by_length(results)
+    results.group_by { |word| word.split.map(&:length) }
+      .to_a
+      .sort_by { |len, words| len.inject(:+) }
+      .map { |len, words| [ len.join(","), words ] }
   end
 end
 

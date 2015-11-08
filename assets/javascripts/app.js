@@ -107,24 +107,30 @@ $(function() {
         currentlyRequesting.thesaurus = word;
         $.getJSON("/preview/thesaurus", { q: word }, function(result) {
           var matches;
+          var list$ = $('<ul>');
 
-          var html = $('<span>').text(result.query + ": ");
           if (result.words.length === 0) {
-            html = html.append("No matches.");
+            list$ = list$.append("<li>No matches.</li>");
           } else {
-            result.words.forEach(function(w, i) {
-              var link =
-                $('<a href="javascript:void(0)"></a>')
-                  .text(w)
-                  .on('click', function() { thesaurusSearch(w) });
-
-              if (i > 0) {
-                html.append(", ")
-              }
-              html.append(link);
+            result.words.forEach(function(w) {
+              var len = w[0];
+              var words = w[1];
+              var group$ = $('<li>');
+              group$.append(len + ": ");
+              words.forEach(function(word, i) {
+                var link =
+                  $('<a href="javascript:void(0)"></a>')
+                    .text(word)
+                    .on('click', function() { thesaurusSearch(word) });
+                if (i > 0) {
+                  group$.append(", ")
+                }
+                group$.append(link);
+              });
+              list$.append(group$);
             });
           }
-          thesaurusPreview.html(html).show();
+          thesaurusPreview.html(list$).show();
           currentlyShowing.thesaurus = word;
           currentlyRequesting.thesaurus = null;
         });

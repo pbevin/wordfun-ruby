@@ -20,17 +20,11 @@ class App < Sinatra::Base
   end
 
   get '/preview/thesaurus' do
-    query = (params[:q] || "").strip
-    entries = Thesaurus.lookup(query)
-    root_words = entries.map(&:root) - [query]
-    if root_words.any?
-      words = root_words
-    else
-      words = entries.select { |entry| entry.root == query }.flat_map(&:words)
-    end
+    query = Wordfun::Query.from_web_params(params)
+    results = Wordfun.thesaurus_preview(query)
 
     content_type :json
-    { query: query, words: words }.to_json
+    { query: query.word, words: results }.to_json
   end
 
   get '/preview/:cmd' do
