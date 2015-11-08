@@ -1,0 +1,51 @@
+%html
+  %head
+    %title Cryptogram Solver
+    %link{rel: "stylesheet", type: "text/css", media: "all", href: stylesheet_path("app") }
+    %meta{name: "viewport", content: "width=device-width, user-scalable=no"}
+
+  %body
+    #results.hidden
+      %h1
+        Results for
+        %em#search_term
+      #result_text
+    #intro
+      %h1 Cryptogram Solver
+
+    %h2 Solve a cryptogram
+    %p Enter a word from a cryptogram, e.g., <code>opgxcxbgxs</code> to see words that match it.
+    %form#crform
+      %input#cr{type: "text", name: "cr", autocorrect: "off", autocapitalize: "off", tabindex: 5}
+      %input{type: "Submit", value: "Cryptogram"}
+      #cr_preview.preview
+
+    %hr
+    %h2 Complete a Word or Phrase
+    %p
+      Type in what you have, with dots for the missing letters (e.g., <code>h.r...i.m</code>)
+      to get matching words and phrases from the dictionary.  Don't type spaces between words.
+      You can match word boundaries with forward slashes, like this: <code>h.r./...l../e.g</code>
+    %form#fwform
+      %input#fw{type: "text", name: "fw", autocorrect: "off", autocapitalize: "off", tabindex: 3}
+      %input{type: "Submit", value: "Find Word/Phrase"}
+      #fw_preview.preview
+
+    %hr
+    %h2 Thesaurus
+    %p Enter a word to get synonyms.
+    %form#thesform
+      %input#thesaurus{type: "text", name: "thesaurus", autocapitalize: "off", tabindex: 5}
+      %button Search Thesaurus
+      #thesaurus_preview.preview
+
+
+
+    %hr
+    %address
+      <a href="http://www.petebevin.com/">Pete Bevin</a>, <a href="mailto:pete@petebevin.com">pete@petebevin.com</a>.
+
+    #def.hidden
+      %iframe
+    %script{src: "http://code.jquery.com/jquery-1.10.1.min.js", type: "text/javascript"}
+    %script{src: javascript_path("app.js"), type: "text/javascript"}

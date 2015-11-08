@@ -8,6 +8,10 @@ class Wordfun
       @context = context
     end
 
+    def self.from_web_params(params)
+      self.new(params[:cmd], params[:q], params[:c])
+    end
+
     def word=(word)
       @word = word.downcase.gsub(" ", "").gsub("…", "...").gsub("?", ".")
     end

@@ -15,6 +15,10 @@ class App < Sinatra::Base
     haml :index
   end
 
+  get '/cryptogram' do
+    haml :cryptogram
+  end
+
   get '/preview/thesaurus' do
     query = (params[:q] || "").strip
     entries = Thesaurus.lookup(query)
@@ -24,24 +28,18 @@ class App < Sinatra::Base
     else
       words = entries.select { |entry| entry.root == query }.flat_map(&:words)
     end
+
+    content_type :json
     { query: query, words: words }.to_json
   end
 
   get '/preview/:cmd' do
-    query = Wordfun::Query.new
-    query.command = params[:cmd]
-    query.word = params[:q]
-    query.context = params[:c]
-
+    query = Wordfun::Query.from_web_params(params)
     Wordfun.preview(query)
   end
 
   get '/words/:cmd' do
-    query = Wordfun::Query.new
-    query.command = params[:cmd]
-    query.word = params[:q]
-    query.context = params[:c]
-
+    query = Wordfun::Query.from_web_params(params)
     results = Wordfun.full_list(query)
 
     content_type :json

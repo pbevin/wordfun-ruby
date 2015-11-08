@@ -154,6 +154,7 @@ $(function() {
 
   $('#anform').submit(showResults('an')).keyup(preview('an'));
   $('#fwform').submit(showResults('fw')).keyup(preview('fw'));
+  $('#crform').submit(showResults('cr')).keyup(preview('cr'));
   $('#thesform').submit(thesResults).keyup(thesPreview);
   $('#an').focus();
 });
