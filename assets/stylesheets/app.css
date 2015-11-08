@@ -92,7 +92,7 @@ code {
 }
 #result_text .entry { overflow: hidden; white-space: nowrap; }
 #result_text .entry.good { background: #ffc; }
-/* #result_text .entry a { font: 14px "Courier New", Courier, mono; } */
+#result_text .entry a { font: normal 14px "Lucida Console", Monaco, monospace; }
 .preview { color: #f00; font-size: 12px; font-weight: bold; display: none; }
 .hidden { display: none; }
 #result_text a { text-decoration: none; }
@@ -124,4 +124,8 @@ code {
   background: -ms-linear-gradient(left,  rgba(255,255,255,0) 0%,rgba(255,255,255,0) 52%,rgba(255,255,255,1) 100%); /* IE10+ */
   background: linear-gradient(left,  rgba(255,255,255,0) 0%,rgba(255,255,255,0) 52%,rgba(255,255,255,1) 100%); /* W3C */
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00000000', endColorstr='#000000',GradientType=1 ); /* IE6-9 */
+}
+
+@media screen and (max-width: 639px) {
+  #result_text .entry a { font: inherit; }
 }
