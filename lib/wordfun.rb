@@ -108,7 +108,16 @@ class Wordfun
     results.group_by { |word| word.split.map(&:length) }
       .to_a
       .sort_by { |len, words| len.inject(:+) }
-      .map { |len, words| [ len.join(","), words ] }
+      .map { |len, words| [ display_length(len), words ] }
+  end
+
+  def display_length(lengths)
+    if lengths.size == 1
+      lengths.first.to_s
+    else
+      total = lengths.inject(:+)
+      "#{total} (#{lengths.join(",")})"
+    end
   end
 end
 
