@@ -1,0 +1,8 @@
+version: '3'
+services:
+  web:
+    restart: always
+    build: .
+    image: pbevin/wordfun
+    ports:
+      - "5199:80"

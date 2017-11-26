@@ -5,7 +5,6 @@ require 'haml'
 require 'wordsearch'
 require 'lingua/stemmer'
 require 'wordnet'
-require 'mysql2'
 require 'json'
 require 'wordfun'
 require 'yaml'
@@ -53,8 +52,6 @@ class Wordfun
       results << word
     end
 
-    results = disambiguate(results, query)
-
     results.map(&:to_api)
   end
 
@@ -81,31 +78,12 @@ class Wordfun
     }
   end
 
-  def disambiguate(results, query)
-    if query.context?
-      with_db do |client|
-        q = query.word.gsub(".", "_")
-        rows = client.query("select word, count(*) as score, definition from words, definitions where definitions.word_id = words.id and match(definition) against ('#{client.escape(query.context)}') and words.letters like '#{client.escape(q)}' and words.length = #{q.length} group by word", as: :hash).to_a
-
-        results = rows.map { |row| w = Word.new(row["word"]).define(row["definition"]); w.score = row["score"]; w }.sort_by(&:score).reverse
-      end
-    end
-    results
-  end
-
   def pluralize(n, noun, plural)
     if n.to_i == 1
       "1 #{noun}"
     else
       "#{n} #{plural}"
     end
-  end
-
-  def with_db
-    dbconfig = YAML.load_file("config/database.yml")
-    client = Mysql2::Client.new(dbconfig)
-    yield client
-    client.close
   end
 
   def group_by_length(results)
