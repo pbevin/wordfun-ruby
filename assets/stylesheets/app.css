@@ -59,12 +59,7 @@ p {
 }
 p.warning {
   font: italic small Verdana, Arial, Helvetica, sans-serif;
-  color: #3366FF;
-}
-.oops {
-  font: italic small Verdana, Arial, Helvetica, sans-serif;
-  color: #FF6633;
-  margin-left: 40px;
+  color: #3366FF
 }
 blockquote {
   margin: 1em 40px;
