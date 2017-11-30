@@ -12,3 +12,7 @@ docker:
 .PHONY: release
 release: docker
 	docker push pbevin/wordfun
+
+.PHONY: live
+live: release
+	ssh docker "cd docker/wordfun && docker-compose pull && docker-compose up -d"
