@@ -40,7 +40,7 @@ $(function() {
 
               entry = $('<div class="entry">');
               entry.append($('<a>').
-                attr("href", "http://www.thefreedictionary.com/" + encodeURIComponent(word.word)).
+                attr("href", "https://www.thefreedictionary.com/" + encodeURIComponent(word.word)).
                 attr("target", "wf_lookup").
                 text(word.word));
               if (word.definition) {
