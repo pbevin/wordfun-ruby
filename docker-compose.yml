@@ -3,6 +3,6 @@ services:
   web:
     restart: always
     build: .
-    image: pbevin/wordfun
+    image: pbevin/wordfun:old
     ports:
       - "5199:80"

@@ -15,4 +15,4 @@ release: docker
 
 .PHONY: live
 live: release
-	ssh docker "cd docker/wordfun && docker-compose pull && docker-compose up -d"
+	ssh docker2 "cd docker/oldwordfun && docker-compose pull && docker-compose up -d"
