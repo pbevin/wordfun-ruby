@@ -5,7 +5,7 @@ source "https://rubygems.org"
 gem "wordsearch", "~> 1.0.0"
 gem 'thesaurus', '~> 0.1.0'
 
-gem "sinatra", "~> 1.4.4"
+gem "sinatra", "~> 2.2.3"
 gem "haml", "~> 4.0.5"
 
 gem "sinatra-asset-pipeline", "~> 0.3.3"
